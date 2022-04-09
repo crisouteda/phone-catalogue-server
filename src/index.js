@@ -7,9 +7,11 @@ const validator = require("express-validator");
 const flash = require("connect-flash");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { connectAWS } = require("./lib/awsAuth");
 
 // Intializations
 const app = express();
+connectAWS();
 
 app.use(cookieParser());
 app.use(express.json());
