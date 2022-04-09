@@ -9,6 +9,20 @@ const PHONE_TABLE_NAME = "phona-data-staging";
 router.use(express.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+router.get("/getPhones", async (req, res) => {
+  var params = {
+    TableName: PHONE_TABLE_NAME,
+  };
+  docClient.query(params, function (err, data) {
+    if (err) {
+      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      res.send(data.Items);
+      console.log("Query succeeded.");
+    }
+  });
+});
+
 router.get("/getPhone/:id", async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
