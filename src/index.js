@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require("./routes/index"));
-app.use("/phone", require("./routes/phones"));
+app.use("/phones", require("./routes/phones"));
 
 // Starting
 app.set("port", process.env.PORT || 4000);
