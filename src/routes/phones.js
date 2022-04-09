@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const AWS = require("aws-sdk");
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const PHONE_TABLE_NAME = "phona-data-staging";
+const PHONE_TABLE_NAME = "phone-data-staging";
 
 router.use(express.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -13,14 +13,21 @@ router.get("/getPhones", async (req, res) => {
   var params = {
     TableName: PHONE_TABLE_NAME,
   };
-  docClient.query(params, function (err, data) {
+  console.log("Scanning Phone table.");
+  docClient.scan(params, onScan);
+
+  function onScan(err, data) {
     if (err) {
-      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+      console.error(
+        "Unable to scan the table. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
     } else {
+      console.log("Scan succeeded.");
+      console.log(data.Items);
       res.send(data.Items);
-      console.log("Query succeeded.");
     }
-  });
+  }
 });
 
 router.get("/getPhone/:id", async (req, res) => {
@@ -31,8 +38,8 @@ router.get("/getPhone/:id", async (req, res) => {
     },
   };
   try {
-    const phonesData = await docClient.scan(params).promise();
-    res.send(phonesData);
+    const phoneData = await docClient.scan(params).promise();
+    res.send(phoneData);
   } catch (err) {
     console.log(err);
   }
