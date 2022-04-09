@@ -19,14 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: ["http://127.0.0.1:3000"],
+    origin: ["*"],
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.header("Access-Control-Allow-Credentials", true);
   next();
