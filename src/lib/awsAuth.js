@@ -1,4 +1,6 @@
 const AWS = require("aws-sdk");
+const dotenv = require("dotenv");
+dotenv.config();
 
 module.exports = {
   connectAWS() {
