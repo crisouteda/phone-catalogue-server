@@ -1,3 +1,5 @@
+const AWS = require("aws-sdk");
+
 module.exports = {
   connectAWS() {
     AWS.config.update({
