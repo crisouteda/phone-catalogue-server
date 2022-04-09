@@ -9,7 +9,7 @@ const PHONE_TABLE_NAME = "phone-data-staging";
 router.use(express.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get("/getPhones", async (req, res) => {
+router.get("/phones", async (req, res) => {
   var params = {
     TableName: PHONE_TABLE_NAME,
   };
@@ -30,7 +30,7 @@ router.get("/getPhones", async (req, res) => {
   }
 });
 
-router.get("/getPhone/:id", async (req, res) => {
+router.get("/phone/:id", async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
     Key: {
@@ -45,7 +45,7 @@ router.get("/getPhone/:id", async (req, res) => {
   }
 });
 
-router.post("/addPhone", async (req, res) => {
+router.post("/phone", async (req, res) => {
   const params = {
     TableName: TABLE_NAME,
     Item: req.body,
@@ -62,7 +62,7 @@ router.post("/addPhone", async (req, res) => {
   });
 });
 
-router.delete("/removePhoneById/:id", async (req, res) => {
+router.delete("/phone/:id", async (req, res) => {
   const params = {
     TableName: table,
     Key: { id: req.params.id },
@@ -80,7 +80,7 @@ router.delete("/removePhoneById/:id", async (req, res) => {
   });
 });
 
-router.put("/updatePhoneById", async (req, res) => {
+router.put("/phone", async (req, res) => {
   const id = req.body.id;
   const params = {
     TableName: table,
