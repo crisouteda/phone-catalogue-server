@@ -12,6 +12,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.get("/phones", async (req, res) => {
   var params = {
     TableName: PHONE_TABLE_NAME,
+    ProjectionExpression: "id, #n, thumbnailFileName, price",
+    ExpressionAttributeNames: { "#n": "name" },
   };
   console.log("Scanning Phone table.");
   docClient.scan(params, onScan);
