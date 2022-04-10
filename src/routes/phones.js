@@ -35,16 +35,24 @@ router.get("/phones", async (req, res) => {
 router.get("/phone/:id", async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
-    Key: {
-      id: { S: req.params.id },
+    KeyConditionExpression: `id = :id`,
+    ExpressionAttributeValues: {
+      ":id": req.params.id,
     },
+    Limit: 1,
   };
-  try {
-    const phoneData = await docClient.scan(params).promise();
-    res.send(phoneData);
-  } catch (err) {
-    console.log(err);
-  }
+
+  docClient.query(params, function (err, data) {
+    if (err) {
+      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("Query succeeded.");
+      res.send(data);
+      data.Items.forEach(function (item) {
+        console.log(" -", item.year + ": " + item.title);
+      });
+    }
+  });
 });
 
 router.post("/phone", async (req, res) => {
