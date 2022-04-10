@@ -36,7 +36,7 @@ router.get("/phone/:id", async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
     Key: {
-      id: req.params.id,
+      id: { S: req.params.id },
     },
   };
   try {
