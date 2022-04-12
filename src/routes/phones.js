@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("pagination/:items/:page", async (req, res) => {
+router.get("/pagination/:items/:page", async (req, res) => {
   var params = {
     TableName: PHONE_TABLE_NAME,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
