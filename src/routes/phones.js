@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:items/:page", async (req, res) => {
+router.get("/pagination/:items/:page", async (req, res) => {
   var params = {
     TableName: PHONE_TABLE_NAME,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
@@ -55,7 +55,6 @@ router.get("/:items/:page", async (req, res) => {
           ? (page + 1) * items
           : data.Items.length - 1;
       const pageItems = data.Items.slice(page * items, maxItem);
-
       res.send(pageItems);
     }
   }
