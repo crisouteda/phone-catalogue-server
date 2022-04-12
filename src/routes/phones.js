@@ -31,29 +31,35 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/pagination/:items/:page", async (req, res) => {
-  var params = {
+router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
+  const ExclusiveStartKey = req.params.exclusiveStartKey && {
+    id: req.params.exclusiveStartKey,
+  };
+  const params = {
     TableName: PHONE_TABLE_NAME,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
     ExpressionAttributeNames: { "#n": "name" },
+    KeyConditionExpression: "*",
+    Limit: parseInt(req.params.items),
+    ExclusiveStartKey,
   };
-  console.log("Scanning Phone table.");
-  docClient.scan(params, onScan);
 
-  function onScan(err, data) {
+  console.log("Querying Phone table.");
+  docClient.scan(params, onQuery);
+
+  function onQuery(err, data) {
     if (err) {
       console.error(
-        "Unable to scan the table. Error JSON:",
+        "Unable to query the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
     } else {
-      console.log("Scan succeeded.");
-      const page = parseInt(req.params.page);
-      const items = parseInt(req.params.items);
-      const hasMore = (page + 1) * items < data.Items.length - 1;
-      const maxItem = hasMore ? (page + 1) * items : data.Items.length - 1;
-      const newItems = data.Items.slice(page * items, maxItem);
-      res.send({ newItems, hasMore });
+      console.log("Query succeeded.");
+
+      res.send({
+        newItems: data.Items,
+        lastEvaluatedKey: data.LastEvaluatedKey.id,
+      });
     }
   }
 });
