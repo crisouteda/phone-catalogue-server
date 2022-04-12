@@ -52,8 +52,8 @@ router.get("/pagination/:items/:page", async (req, res) => {
       const items = parseInt(req.params.items);
       const hasMore = (page + 1) * items < data.Items.length - 1;
       const maxItem = hasMore ? (page + 1) * items : data.Items.length - 1;
-      const pageItems = data.Items.slice(page * items, maxItem);
-      res.send(pageItems, hasMore);
+      const newItems = data.Items.slice(page * items, maxItem);
+      res.send({ newItems, hasMore });
     }
   }
 });
