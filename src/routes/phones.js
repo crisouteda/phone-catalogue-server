@@ -50,12 +50,10 @@ router.get("/pagination/:items/:page", async (req, res) => {
       console.log("Scan succeeded.");
       const page = parseInt(req.params.page);
       const items = parseInt(req.params.items);
-      const maxItem =
-        (page + 1) * items < data.Items.length - 1
-          ? (page + 1) * items
-          : data.Items.length - 1;
+      const hasMore = (page + 1) * items < data.Items.length - 1;
+      const maxItem = hasMore ? (page + 1) * items : data.Items.length - 1;
       const pageItems = data.Items.slice(page * items, maxItem);
-      res.send(pageItems);
+      res.send(pageItems, hasMore);
     }
   }
 });
