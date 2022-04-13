@@ -26,8 +26,8 @@ description: list the basic information (id, name, price and thumbnailFileName) 
 
 parameters:
 
-- items: number of items to retrieve
-- exclusiveStartKey: last item retrieved
+- `items`: \*[Required] number of items to retrieve.
+- `exclusiveStartKey`: item from which the query will start
 
 method: GET
 
@@ -77,6 +77,7 @@ parameters: body containig data object. Every key in the following example must 
 
 ```json
 "body": {
+        "id": "ef09f910-21c5-4682-9794-767e208028ec",
         "name": "Galaxy S20 FE 2022",
         "manufacturer": "Samsung",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nam libero justo laoreet sit amet cursus. Ac orci phasellus egestas tellus rutrum tellus pellentesque",
