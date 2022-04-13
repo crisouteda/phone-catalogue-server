@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
       );
       res.send(new Error(err));
     } else {
-      console.log("Scan succeeded.");
+      console.log("Scan succeeded.", JSON.stringify(data, null, 2));
       res.send(data.Items);
     }
   }
@@ -54,9 +54,9 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
         "Unable to query the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
+      res.send(new Error(err));
     } else {
-      console.log("Query succeeded.");
-
+      console.log("Query succeeded.", JSON.stringify(data, null, 2));
       res.send({
         newItems: data.Items,
         lastEvaluatedKey: data.LastEvaluatedKey.id,
@@ -80,7 +80,7 @@ router.get("/:id", async (req, res) => {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
       res.send(new Error(err));
     } else {
-      console.log("Query succeeded.");
+      console.log("Query succeeded.", JSON.stringify(data, null, 2));
       res.send(data.Items);
     }
   });
@@ -92,7 +92,6 @@ router.post("/", async (req, res) => {
     TableName: PHONE_TABLE_NAME,
     Item: req.body,
   };
-  console.log({ params });
   docClient.put(params, function (err, data) {
     if (err) {
       console.error(
@@ -122,13 +121,13 @@ router.delete("/:id", async (req, res) => {
       res.send(new Error(err));
     } else {
       console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
+      res.send(data);
     }
   });
 });
 
 router.put("/", async (req, res) => {
   const id = req.body.id;
-
   const params = {
     TableName: PHONE_TABLE_NAME,
     Key: { id },
@@ -147,7 +146,6 @@ router.put("/", async (req, res) => {
       ":r": req.body.ram,
     },
   };
-  console.log({ id, params });
   docClient.update(params, function (err, data) {
     if (err) {
       console.error(
@@ -157,6 +155,7 @@ router.put("/", async (req, res) => {
       res.send(new Error(err));
     } else {
       console.log("Updated item succeeded:", JSON.stringify(data, null, 2));
+      res.send(data);
     }
   });
 });
