@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
+const { isLoggedIn } = require("../lib/auth");
 
 const router = express.Router();
 
@@ -88,7 +89,7 @@ router.get("/:id", async (req, res) => {
   });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", isLoggedIn, async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
     Item: { ...req.body, id: uuidv4() },
@@ -109,7 +110,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isLoggedIn, async (req, res) => {
   const params = {
     TableName: PHONE_TABLE_NAME,
     Key: { id: req.params.id },
@@ -131,7 +132,7 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
-router.put("/", async (req, res) => {
+router.put("/", isLoggedIn, async (req, res) => {
   const id = req.body.id;
   const params = {
     TableName: PHONE_TABLE_NAME,
