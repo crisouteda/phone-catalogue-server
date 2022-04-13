@@ -15,6 +15,7 @@ connectAWS();
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
@@ -59,6 +60,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require("./routes/index"));
+app.use("/auth", require("./routes/auth"));
 app.use("/phones", require("./routes/phones"));
 
 // Starting

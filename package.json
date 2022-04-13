@@ -15,14 +15,18 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1110.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-handlebars": "^5.2.1",
     "express-session": "^1.17.2",
     "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "routes": "^2.1.0",
     "uuid": "^8.3.2"
