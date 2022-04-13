@@ -6,7 +6,7 @@ module.exports = {
     next();
     cors({
       origin: ["http://127.0.0.1:3000"],
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST", "PUT", "DELELTE", "OPTIONS"],
       credentials: true,
     });
     next();
