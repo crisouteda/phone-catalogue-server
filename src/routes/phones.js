@@ -1,7 +1,9 @@
 const express = require("express");
-const router = express.Router();
 const bodyParser = require("body-parser");
 const AWS = require("aws-sdk");
+const { v4: uuidv4 } = require("uuid");
+
+const router = express.Router();
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const PHONE_TABLE_NAME = "phone-data-staging";
@@ -87,10 +89,9 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log({ req });
   const params = {
     TableName: PHONE_TABLE_NAME,
-    Item: req.body,
+    Item: { ...req.body, id: uuidv4() },
   };
   docClient.put(params, function (err, data) {
     if (err) {
@@ -100,8 +101,10 @@ router.post("/", async (req, res) => {
       );
       res.send(new Error(err));
     } else {
-      console.log("Added item:", JSON.stringify(req, null, 2));
-      res.send(data);
+      console.log("Added item:", params.Item.id);
+      res.send({
+        message: `Item created successfully with id: ${params.Item.id}.`,
+      });
     }
   });
 });
@@ -121,7 +124,9 @@ router.delete("/:id", async (req, res) => {
       res.send(new Error(err));
     } else {
       console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
-      res.send(data);
+      res.send({
+        message: `Item with id=${req.params.id} deleted successfully.`,
+      });
     }
   });
 });
@@ -155,7 +160,7 @@ router.put("/", async (req, res) => {
       res.send(new Error(err));
     } else {
       console.log("Updated item succeeded:", JSON.stringify(data, null, 2));
-      res.send(data);
+      res.send({ data, message: `Item with id=${id} updated successfully.` });
     }
   });
 });
