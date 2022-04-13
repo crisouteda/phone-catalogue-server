@@ -24,6 +24,7 @@ router.get("/", async (req, res) => {
         "Unable to scan the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
+      res.send(new Error(err));
     } else {
       console.log("Scan succeeded.");
       res.send(data.Items);
@@ -77,36 +78,38 @@ router.get("/:id", async (req, res) => {
   docClient.query(params, function (err, data) {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+      res.send(new Error(err));
     } else {
       console.log("Query succeeded.");
-      res.send(data);
-      data.Items.forEach(function (item) {
-        console.log(" -", item.year + ": " + item.title);
-      });
+      res.send(data.Items);
     }
   });
 });
 
 router.post("/", async (req, res) => {
+  console.log({ req });
   const params = {
-    TableName: TABLE_NAME,
+    TableName: PHONE_TABLE_NAME,
     Item: req.body,
   };
+  console.log({ params });
   docClient.put(params, function (err, data) {
     if (err) {
       console.error(
         "Unable to add item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
+      res.send(new Error(err));
     } else {
-      console.log("Added item:", JSON.stringify(data, null, 2));
+      console.log("Added item:", JSON.stringify(req, null, 2));
+      res.send(data);
     }
   });
 });
 
 router.delete("/:id", async (req, res) => {
   const params = {
-    TableName: table,
+    TableName: PHONE_TABLE_NAME,
     Key: { id: req.params.id },
   };
 
@@ -116,6 +119,7 @@ router.delete("/:id", async (req, res) => {
         "Unable to delete item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
+      res.send(new Error(err));
     } else {
       console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
     }
@@ -124,31 +128,35 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/", async (req, res) => {
   const id = req.body.id;
+
   const params = {
-    TableName: table,
+    TableName: PHONE_TABLE_NAME,
     Key: { id },
     UpdateExpression:
-      "set name=:n, manufacturer=:m, description=:d, color=:c, price:p, imageFileName:i, screen:s, processor:pro, ram:r",
+      "set #n=:n, manufacturer=:m, description=:d, color=:c, price=:p, memory=:me, screen=:s, processor=:pro, ram=:r",
+    ExpressionAttributeNames: { "#n": "name" },
     ExpressionAttributeValues: {
       ":n": req.body.name,
       ":m": req.body.manufacturer,
       ":d": req.body.description,
       ":c": req.body.color,
       ":p": req.body.price,
-      ":i": req.body.image,
+      ":me": req.body.memory,
       ":s": req.body.screen,
       ":pro": req.body.processor,
       ":r": req.body.ram,
     },
   };
+  console.log({ id, params });
   docClient.update(params, function (err, data) {
     if (err) {
       console.error(
-        "Unable to delete item. Error JSON:",
+        "Unable to update item. Error JSON:",
         JSON.stringify(err, null, 2)
       );
+      res.send(new Error(err));
     } else {
-      console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
+      console.log("Updated item succeeded:", JSON.stringify(data, null, 2));
     }
   });
 });
