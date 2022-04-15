@@ -7,14 +7,15 @@ const { isLoggedIn } = require("../lib/auth");
 const router = express.Router();
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const PHONE_TABLE_NAME = "phone-data-staging";
+const env = process.env.STAGE_ENVIRONMNET;
+const TableName = `phone-data-${env}`;
 
 router.use(express.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get("/", async (req, res) => {
   var params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
     ExpressionAttributeNames: { "#n": "name" },
   };
@@ -40,7 +41,7 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
     id: req.params.exclusiveStartKey,
   };
   const params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
     ExpressionAttributeNames: { "#n": "name" },
     KeyConditionExpression: "*",
@@ -70,7 +71,7 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     KeyConditionExpression: `id = :id`,
     ExpressionAttributeValues: {
       ":id": req.params.id,
@@ -91,7 +92,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", isLoggedIn, async (req, res) => {
   const params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     Item: { ...req.body, id: uuidv4() },
   };
   docClient.put(params, function (err, data) {
@@ -112,7 +113,7 @@ router.post("/", isLoggedIn, async (req, res) => {
 
 router.delete("/:id", isLoggedIn, async (req, res) => {
   const params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     Key: { id: req.params.id },
   };
 
@@ -135,7 +136,7 @@ router.delete("/:id", isLoggedIn, async (req, res) => {
 router.put("/", isLoggedIn, async (req, res) => {
   const id = req.body.id;
   const params = {
-    TableName: PHONE_TABLE_NAME,
+    TableName,
     Key: { id },
     UpdateExpression:
       "set #n=:n, manufacturer=:m, description=:d, color=:c, price=:p, memory=:me, screen=:s, processor=:pro, ram=:r",

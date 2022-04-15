@@ -7,7 +7,7 @@ AWS.config.update({
 const dynamodb = new AWS.DynamoDB();
 
 const params = {
-  TableName: "users",
+  TableName: "users-staging",
   KeySchema: [
     { AttributeName: "email", KeyType: "HASH" }, //Partition key
   ],

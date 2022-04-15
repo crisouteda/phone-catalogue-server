@@ -8,7 +8,8 @@ const { isLoggedIn } = require("../lib/auth");
 const router = express.Router();
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const TableName = "users";
+const env = process.env.STAGE_ENVIRONMNET;
+const TableName = `users-${env}`;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
