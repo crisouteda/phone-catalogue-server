@@ -1,7 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const AWS = require("aws-sdk");
 const { isLoggedIn } = require("../lib/auth");
@@ -11,7 +10,6 @@ const router = express.Router();
 const docClient = new AWS.DynamoDB.DocumentClient();
 const TableName = "users";
 
-// router.use(cookieParser());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,9 +35,13 @@ router.post("/signup", async (req, res) => {
         );
         res.send(new Error(err));
       } else {
-        console.log("Added item:", params);
-        res.send({
-          message: `Item created successfully. ${params}.`,
+        const token = jwt.sign({ email }, process.env.TOKEN_SECRET, {
+          expiresIn: 600,
+        });
+        res.json({
+          message: `Item created successfully. ${JSON.stringify(params)}.`,
+          auth: true,
+          token: token,
         });
       }
     });
