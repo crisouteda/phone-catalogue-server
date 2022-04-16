@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const AWS = require("aws-sdk");
+const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
+const cookieParser = require("cookie-parser");
 const { isLoggedIn } = require("../lib/auth");
 
 const router = express.Router();
@@ -70,6 +72,7 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  const id = req.params.id;
   const params = {
     TableName,
     KeyConditionExpression: `id = :id`,
@@ -84,16 +87,17 @@ router.get("/:id", async (req, res) => {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
       res.send(new Error(err));
     } else {
-      console.log("Query succeeded.", JSON.stringify(data, null, 2));
+      console.log(`Query succeeded. Returned item with id=${id}`);
       res.send(data.Items);
     }
   });
 });
 
 router.post("/", isLoggedIn, async (req, res) => {
+  const { data } = req.body;
   const params = {
     TableName,
-    Item: { ...req.body, id: uuidv4() },
+    Item: { ...JSON.parse(data), id: uuidv4() },
   };
   docClient.put(params, function (err, data) {
     if (err) {
@@ -111,10 +115,10 @@ router.post("/", isLoggedIn, async (req, res) => {
   });
 });
 
-router.delete("/:id", isLoggedIn, async (req, res) => {
+router.post("/delete", isLoggedIn, async (req, res) => {
   const params = {
     TableName,
-    Key: { id: req.params.id },
+    Key: { id: req.body.id },
   };
 
   docClient.delete(params, function (err, data) {
@@ -127,14 +131,15 @@ router.delete("/:id", isLoggedIn, async (req, res) => {
     } else {
       console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
       res.send({
-        message: `Item with id=${req.params.id} deleted successfully.`,
+        message: `Item with id=${req.body.id} deleted successfully.`,
       });
     }
   });
 });
 
-router.put("/", isLoggedIn, async (req, res) => {
-  const id = req.body.id;
+router.post("/put", isLoggedIn, async (req, res) => {
+  const data = JSON.parse(req.body.data);
+  const id = data.id;
   const params = {
     TableName,
     Key: { id },
@@ -142,15 +147,15 @@ router.put("/", isLoggedIn, async (req, res) => {
       "set #n=:n, manufacturer=:m, description=:d, color=:c, price=:p, memory=:me, screen=:s, processor=:pro, ram=:r",
     ExpressionAttributeNames: { "#n": "name" },
     ExpressionAttributeValues: {
-      ":n": req.body.name,
-      ":m": req.body.manufacturer,
-      ":d": req.body.description,
-      ":c": req.body.color,
-      ":p": req.body.price,
-      ":me": req.body.memory,
-      ":s": req.body.screen,
-      ":pro": req.body.processor,
-      ":r": req.body.ram,
+      ":n": data.name,
+      ":m": data.manufacturer,
+      ":d": data.description,
+      ":c": data.color,
+      ":p": data.price,
+      ":me": data.memory,
+      ":s": data.screen,
+      ":pro": data.processor,
+      ":r": data.ram,
     },
   };
   docClient.update(params, function (err, data) {

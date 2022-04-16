@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   isLoggedIn(req, res, next) {
-    const token = req.headers["x-access-token"];
+    const token = req.body.token;
     if (!token) {
       res.send("Sign up to get a token");
     } else {
