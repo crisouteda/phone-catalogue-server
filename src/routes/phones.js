@@ -42,19 +42,20 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
   const ExclusiveStartKey = req.params.exclusiveStartKey && {
     id: req.params.exclusiveStartKey,
   };
+  const Limit = parseInt(req.params.items);
+
   const params = {
     TableName,
     ProjectionExpression: "id, #n, thumbnailFileName, price",
     ExpressionAttributeNames: { "#n": "name" },
     KeyConditionExpression: "*",
-    Limit: parseInt(req.params.items),
+    Limit,
     ExclusiveStartKey,
   };
 
-  console.log("Querying Phone table.");
-  docClient.scan(params, onQuery);
+  docClient.scan(params, onScan);
 
-  function onQuery(err, data) {
+  function onScan(err, data) {
     if (err) {
       console.error(
         "Unable to query the table. Error JSON:",
@@ -62,10 +63,12 @@ router.get("/pagination/:items/:exclusiveStartKey?", async (req, res) => {
       );
       res.send(new Error(err));
     } else {
-      console.log("Query succeeded.", JSON.stringify(data, null, 2));
+      console.log("Query succeeded.");
+      const limitReached = Limit > data.Count;
       res.send({
         newItems: data.Items,
-        lastEvaluatedKey: data.LastEvaluatedKey.id,
+        lastEvaluatedKey: !limitReached && data.LastEvaluatedKey.id,
+        limitReached,
       });
     }
   }
@@ -109,7 +112,8 @@ router.post("/", isLoggedIn, async (req, res) => {
     } else {
       console.log("Added item:", params.Item.id);
       res.send({
-        message: `Item created successfully with id: ${params.Item.id}.`,
+        message: `Item created successfully.`,
+        id: params.Item.id,
       });
     }
   });
@@ -158,7 +162,10 @@ router.post("/put", isLoggedIn, async (req, res) => {
       ":r": data.ram,
     },
   };
-  docClient.update(params, function (err, data) {
+
+  docClient.update(params, onUpdate);
+
+  function onUpdate(err, dat) {
     if (err) {
       console.error(
         "Unable to update item. Error JSON:",
@@ -166,10 +173,10 @@ router.post("/put", isLoggedIn, async (req, res) => {
       );
       res.send(new Error(err));
     } else {
-      console.log("Updated item succeeded:", JSON.stringify(data, null, 2));
+      console.log("Updated item succeeded:", JSON.stringify(dat, null, 2));
       res.send({ data, message: `Item with id=${id} updated successfully.` });
     }
-  });
+  }
 });
 
 module.exports = router;
