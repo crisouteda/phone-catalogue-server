@@ -1,18 +1,10 @@
 # Phone Catalogue - Server side
 
-Backend for phone catalogue management
+Backend for phone catalogue management. Frontend can be found in the following repository: [phone-catalogue-client](https://github.com/crisouteda/phone-catalogue-client)
 
-### Deployment
+to `prod` branch in Github, heroku will run
 
-The present backend is deployed in [Heroku](https://devcenter.heroku.com/categories/reference), a CI/CD tool.
-
-- [staging](https://phone-catalogue-server-staging.herokuapp.com/)
-  Push the changes to `main` branch in Github, heroku will run
-
-- [prod](https://phone-catalogue-server.herokuapp.com/)
-  Push to changes to `prod` branch in Github, heroku will run
-
-## endpoints
+## ⚙️ endpoints
 
 ### /auth/signup
 
@@ -119,7 +111,67 @@ method: POST
 
 description: updates phone information in the database by id
 
-## Following improvements and TODOS
+## 💻 Development
+
+These instructions will allow you to get a working copy of the project on your local machine for development and testing purposes.
+
+### 📋 Prerequisites
+
+You need to have installed Node JS. Developed with v17.9.0.
+
+### 🔧 Installation
+
+1. Download this repository as zip or clone the repository on your device (if you clone the repository, note that you will not be able to add your commits).
+2. Open a terminal in the root directory of the repository.
+3. Install the local dependencies by running the command in the terminal:
+
+```
+npm install
+```
+
+or
+
+```
+yarn
+```
+
+### 🏁 Starting the project
+
+To serve the app locally run:
+
+```
+npm run start
+```
+
+or
+
+```
+yarn start
+```
+
+If you want to re-run the server every time you change the code source:
+
+```
+npm run watch
+```
+
+or
+
+```
+yarn watch
+```
+
+### 🚀 Deployment to Heroku
+
+The present backend is deployed in [Heroku](https://devcenter.heroku.com/categories/reference), a CI/CD tool.
+
+- [staging](https://phone-catalogue-server-staging.herokuapp.com/)
+  Push the changes to `main` branch in Github, heroku will run
+
+- [prod](https://phone-catalogue-server.herokuapp.com/)
+  Push to changes
+
+## 📝 Following improvements and TODOS
 
 - DELETE and PUT requests have been changed to be POST requests because of an error with CORS when calling the endpoints from the frontend.
 
