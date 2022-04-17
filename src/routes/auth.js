@@ -14,10 +14,6 @@ const TableName = `users-${env}`;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get("/isUserAuth", isLoggedIn, async (req, res) => {
-  res.send({ message: "You are signed up" });
-});
-
 router.post("/signup", async (req, res) => {
   const params = {
     TableName,
