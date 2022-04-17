@@ -45,10 +45,11 @@ description: list all the available information for the requested phone
 
 ### /phones
 
-parameters: body containig data object. See example:
+parameters: body containig phone data and token for access validation. See example:
 
 ```json
 "body": {
+    "token": "randomTOKENhere",
     "screen": "1080 x 2400 pixels",
     "memory": "128GB 6GB RAM",
     "name": "Galaxy S20 FE 2022",
@@ -63,20 +64,28 @@ method: POST
 
 description: adds a new phone to the database
 
-### /phones/:id
+### /phones/delete
 
-parameters: phone id
+parameters: body containing object with phone id and authorization token.
 
-method: DELETE
+```json
+"body": {
+        "id": "ef09f910-21c5-4682-9794-767e208028ec",
+        "token": "randomTOKENhere",
+}
+```
+
+method: POST
 
 description: removes phone from database by id
 
 ### /phones
 
-parameters: body containig data object. Every key in the following example must be sent:
+parameters: body containig phone data and authorization token. Every key in the following example must be sent:
 
 ```json
 "body": {
+      "token": "randomTOKENhere",
         "id": "ef09f910-21c5-4682-9794-767e208028ec",
         "name": "Galaxy S20 FE 2022",
         "manufacturer": "Samsung",
