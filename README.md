@@ -14,6 +14,22 @@ The present backend is deployed in [Heroku](https://devcenter.heroku.com/categor
 
 ## endpoints
 
+### /auth/signup
+
+parameters: body containing email and password
+
+method: POST
+
+description: hashes the password and ads the hashed password and the email to the database. Returns a token which the user must send to have access to some endpoints
+
+### /auth/signin
+
+parameters: body containing email and password
+
+method: POST
+
+description: checks if the email introduced exists. If exists it checks if the hashed password in the database matched the password send in the body. Returns a token if passwords match.
+
 ### /phones
 
 parameters: none
@@ -85,7 +101,7 @@ parameters: body containig phone data and authorization token. Every key in the 
 
 ```json
 "body": {
-      "token": "randomTOKENhere",
+        "token": "randomTOKENhere",
         "id": "ef09f910-21c5-4682-9794-767e208028ec",
         "name": "Galaxy S20 FE 2022",
         "manufacturer": "Samsung",
@@ -99,6 +115,12 @@ parameters: body containig phone data and authorization token. Every key in the 
 }
 ```
 
-method: PUT
+method: POST
 
 description: updates phone information in the database by id
+
+## Following improvements and TODOS
+
+- DELETE and PUT requests have been changed to be POST requests because of an error with CORS when calling the endpoints from the frontend.
+
+- Token must be send in the body instead of in the headers because of an error with CORS when calling the endpoints from the frontend.
