@@ -2,6 +2,13 @@
 
 Backend for phone catalogue management. Frontend can be found in the following repository: [phone-catalogue-client](https://github.com/crisouteda/phone-catalogue-client)
 
+## ❤️ Live demo
+
+The app is served in two environments:
+
+- [staging](https://phone-catalogue-server-staging.herokuapp.com/)
+- [prod](https://phone-catalogue-server.herokuapp.com/)
+
 ## ⚙️ endpoints
 
 ### /auth/signup
@@ -142,6 +149,18 @@ yarn
 - **TOKEN_SECRET**: random secret to hash passwords
 - **STAGE_ENVIRONMNET**: to handle the environment and used to call the right database. staging and prod have been used
 
+5. Create the databases. Two databases have been used, one for phones and another one for users. To create the databases run:
+
+```
+node createTables/Users.js
+```
+
+and
+
+```
+node createTables/Phones.js
+```
+
 ### 🏁 Starting the project
 
 To serve the app locally run:
@@ -174,7 +193,7 @@ The present backend is deployed in [Heroku](https://devcenter.heroku.com/categor
 
 It is necessary to have the Heroku CLI installed and configured. More info [here](https://devcenter.heroku.com/articles/heroku-cli)
 
-- [staging](https://phone-catalogue-server-staging.herokuapp.com/)
+- **staging**
 
   From the main branch run:
 
@@ -184,7 +203,7 @@ It is necessary to have the Heroku CLI installed and configured. More info [here
 
   ```
 
-- [prod](https://phone-catalogue-server.herokuapp.com/)
+- **prod**
 
   From the prod branch run:
 
@@ -205,3 +224,7 @@ It is necessary to have the Heroku CLI installed and configured. More info [here
 - DELETE and PUT requests have been changed to be POST requests because of an error with CORS when calling the endpoints from the frontend.
 
 - Token must be send in the body instead of in the headers because of an error with CORS when calling the endpoints from the frontend.
+
+- Email check. Improve the authentication and ensure the email is valid.
+
+- Error handling improvements. Handle possible errors and return better error messages
