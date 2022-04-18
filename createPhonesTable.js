@@ -31,13 +31,3 @@ dynamodb.createTable(params, function (err, data) {
     );
   }
 });
-
-// { AttributeName: "name", AttributeType: "S" },
-// { AttributeName: "manufacturer", AttributeType: "S" },
-// { AttributeName: "description", AttributeType: "S" },
-// { AttributeName: "color", AttributeType: "S" },
-// { AttributeName: "price", AttributeType: "N" },
-// { AttributeName: "imageFileName", AttributeType: "S" },
-// { AttributeName: "screen", AttributeType: "S" },
-// { AttributeName: "processor", AttributeType: "S" },
-// { AttributeName: "ram", AttributeType: "N" },

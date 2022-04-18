@@ -15,6 +15,7 @@ connectAWS();
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
@@ -26,8 +27,18 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "*");
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://phone-catalogue-app.netlify.app",
+    "https://phone-catalogue-app-staging.netlify.app",
+  ];
+  const origin = req.headers.origin;
+  const headers = req.headers;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
@@ -59,6 +70,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require("./routes/index"));
+app.use("/auth", require("./routes/auth"));
 app.use("/phones", require("./routes/phones"));
 
 // Starting
