@@ -2,8 +2,6 @@
 
 Backend for phone catalogue management. Frontend can be found in the following repository: [phone-catalogue-client](https://github.com/crisouteda/phone-catalogue-client)
 
-to `prod` branch in Github, heroku will run
-
 ## ⚙️ endpoints
 
 ### /auth/signup
@@ -174,11 +172,27 @@ yarn watch
 
 The present backend is deployed in [Heroku](https://devcenter.heroku.com/categories/reference), a CI/CD tool.
 
+It is necessary to have the Heroku CLI installed and configured. More info [here](https://devcenter.heroku.com/articles/heroku-cli)
+
 - [staging](https://phone-catalogue-server-staging.herokuapp.com/)
-  Push the changes to `main` branch in Github, heroku will run
+
+  From the main branch run:
+
+  ```
+  heroku git:remote -a phone-catalogue-server-staging
+  git push heroku main
+
+  ```
 
 - [prod](https://phone-catalogue-server.herokuapp.com/)
-  Push to changes
+
+  From the prod branch run:
+
+  ```
+  heroku git:remote -a phone-catalogue-server
+  git push heroku prod:main
+
+  ```
 
 ## 🛠️ Tools
 
