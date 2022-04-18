@@ -118,6 +118,7 @@ These instructions will allow you to get a working copy of the project on your l
 ### 📋 Prerequisites
 
 You need to have installed Node JS. Developed with v17.9.0.
+Also, an account in Amazon Web Services (AWS) is needed.
 
 ### 🔧 Installation
 
@@ -134,6 +135,14 @@ or
 ```
 yarn
 ```
+
+4. Some environmental variables are needed. Create a .env file with the following keys:
+
+- **AWS_ACCESS_KEY_ID**: Specifies an AWS access key associated with an IAM user or role.
+- **AWS_SECRET_ACCESS_KEY**: Specifies the secret key associated with the access key. This is essentially the "password" for the access key.
+- **AWS_DEFAULT_REGION**: Specifies the AWS Region to send the request to.
+- **TOKEN_SECRET**: random secret to hash passwords
+- **STAGE_ENVIRONMNET**: to handle the environment. staging and prod have been used
 
 ### 🏁 Starting the project
 
@@ -170,6 +179,12 @@ The present backend is deployed in [Heroku](https://devcenter.heroku.com/categor
 
 - [prod](https://phone-catalogue-server.herokuapp.com/)
   Push to changes
+
+## 🛠️ Tools
+
+### Database
+
+- The databse used is DynamoDB. It has been chosen for being a NoSQL database. This gives some extra flexibility to the data and the phone providers to add the data they prefer about the phone specifications. This particular NoSQL database was selected because AWS provides a SDK to handle easily and fast the CRUD actions. aws-sdk (version ^2.1110.0)
 
 ## 📝 Following improvements and TODOS
 
