@@ -142,7 +142,7 @@ yarn
 - **AWS_SECRET_ACCESS_KEY**: Specifies the secret key associated with the access key. This is essentially the "password" for the access key.
 - **AWS_DEFAULT_REGION**: Specifies the AWS Region to send the request to.
 - **TOKEN_SECRET**: random secret to hash passwords
-- **STAGE_ENVIRONMNET**: to handle the environment. staging and prod have been used
+- **STAGE_ENVIRONMNET**: to handle the environment and used to call the right database. staging and prod have been used
 
 ### 🏁 Starting the project
 
