@@ -32,6 +32,7 @@ const getAllPagination = async (req, res) => {
   const ExclusiveStartKey = req.params.exclusiveStartKey && {
     id: req.params.exclusiveStartKey,
   };
+
   const Limit = parseInt(req.params.items);
 
   const params = {
@@ -40,9 +41,10 @@ const getAllPagination = async (req, res) => {
     ExpressionAttributeNames: { "#n": "name" },
     KeyConditionExpression: "*",
     Limit,
-    ExclusiveStartKey,
   };
 
+  if (req.params.exclusiveStartKey)
+    params[ExclusiveStartKey] = ExclusiveStartKey;
   docClient.scan(params, onScan);
 
   function onScan(err, data) {
